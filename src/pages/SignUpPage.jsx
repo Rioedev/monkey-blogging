@@ -3,8 +3,9 @@ import { Label } from "../components/label";
 import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { IconEyeClose } from "../components/icon";
+import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import Field from "../components/field/Field";
+import { useState } from "react";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -36,6 +37,8 @@ const SignUpPage = () => {
   const handleSignUp = (values) => {
     console.log(values);
   };
+
+  const [togglePassword, setTogglePassword] = useState(false);
   return (
     <SignUpPageStyles>
       <div className="container">
@@ -63,12 +66,20 @@ const SignUpPage = () => {
           <Field>
             <Label htmlFor="password">Password</Label>
             <Input
-              type="password"
+              type={togglePassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
               control={control}
             >
-              <IconEyeClose className="input-icon"></IconEyeClose>
+              {!togglePassword ? (
+                <IconEyeClose
+                  onClick={() => setTogglePassword(true)}
+                ></IconEyeClose>
+              ) : (
+                <IconEyeOpen
+                  onClick={() => setTogglePassword(false)}
+                ></IconEyeOpen>
+              )}
             </Input>
           </Field>
         </form>
