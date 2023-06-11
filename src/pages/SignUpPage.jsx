@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IconEyeClose } from "../components/icon";
+import Field from "../components/field/Field";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -21,12 +22,6 @@ const SignUpPageStyles = styled.div`
   .form {
     max-width: 700px;
     margin: 0 auto;
-  }
-  .field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: 20px;
   }
 `;
 
@@ -47,7 +42,7 @@ const SignUpPage = () => {
         <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
         <h1 className="heading">Monkey Blogging</h1>
         <form className="form" onSubmit={handleSubmit(handleSignUp)}>
-          <div className="field">
+          <Field>
             <Label htmlFor="fullname">Fullname</Label>
             <Input
               type="text"
@@ -55,7 +50,27 @@ const SignUpPage = () => {
               placeholder="Enter your fullname"
               control={control}
             ></Input>
-          </div>
+          </Field>
+          <Field>
+            <Label htmlFor="email">Email address</Label>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Enter your email address"
+              control={control}
+            ></Input>
+          </Field>
+          <Field>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              control={control}
+            >
+              <IconEyeClose className="input-icon"></IconEyeClose>
+            </Input>
+          </Field>
         </form>
       </div>
     </SignUpPageStyles>
