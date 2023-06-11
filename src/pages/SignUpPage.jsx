@@ -1,12 +1,13 @@
 import { Input } from "../components/input";
 import { Label } from "../components/label";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import Field from "../components/field/Field";
-import { useState } from "react";
 import Button from "../components/button/Button";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -27,6 +28,18 @@ const SignUpPageStyles = styled.div`
   }
 `;
 
+const schema = yup.object({
+  fullname: yup.string().required("Please enter your full name"),
+  email: yup
+    .string()
+    .email("Please enter valid email address")
+    .required("Please enter your email address"),
+  password: yup
+    .string()
+    .min(8, "Your password must be at least 8 characters long")
+    .required("Please enter your password"),
+});
+
 const SignUpPage = () => {
   const {
     control,
@@ -34,7 +47,7 @@ const SignUpPage = () => {
     formState: { errors, isValid, isSubmitting },
     watch,
     reset,
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: "onChange", resolver: yupResolver(schema) });
 
   const handleSignUp = (values) => {
     if (!isValid) return;
