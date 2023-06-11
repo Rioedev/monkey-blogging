@@ -18,11 +18,8 @@ const ButtonStyles = styled.button`
     ${(props) => props.theme.primary},
     ${(props) => props.theme.secondary}
   );
-  min-width: 343px;
-  height: ${(props) => props.height || "70px"};
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
+  height: ${(props) => props.height || "66px"};
   &:disabled {
     opacity: 0.5;
     pointer-events: none;
