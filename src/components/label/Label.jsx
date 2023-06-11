@@ -8,6 +8,7 @@ const LabelStyles = styled.label`
   font-size: 18px;
 `;
 
+// eslint-disable-next-line react/prop-types
 const Label = ({ htmlFor = "", children, ...props }) => {
   return (
     <LabelStyles htmlFor={htmlFor} {...props}>
