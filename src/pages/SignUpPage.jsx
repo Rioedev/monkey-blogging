@@ -1,6 +1,6 @@
 import { Input } from "../components/input";
 import { Label } from "../components/label";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IconEyeClose, IconEyeOpen } from "../components/icon";
@@ -8,6 +8,7 @@ import Field from "../components/field/Field";
 import Button from "../components/button/Button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -54,11 +55,21 @@ const SignUpPage = () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
-      }, 5000);
+      }, 4000);
     });
   };
 
   const [togglePassword, setTogglePassword] = useState(false);
+
+  useEffect(() => {
+    const arrErrors = Object.values(errors);
+    if (arrErrors.length > 0) {
+      toast.error(arrErrors[0]?.message, {
+        pauseOnHover: false,
+      });
+    }
+  }, [errors]);
+
   return (
     <SignUpPageStyles>
       <div className="container">
