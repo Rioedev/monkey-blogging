@@ -8,6 +8,22 @@ import Field from "../components/field/Field";
 import { Label } from "../components/label";
 import { Input } from "../components/input";
 import Button from "../components/button/Button";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import { IconEyeClose, IconEyeOpen } from "../components/icon";
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .email("Please enter valid email address")
+    .required("Please enter your email address"),
+  password: yup
+    .string()
+    .min(8, "Your password must be at least 8 characters long")
+    .required("Please enter your password"),
+});
 
 const SignInPage = () => {
   const {
@@ -16,7 +32,20 @@ const SignInPage = () => {
     formState: { isValid, isSubmitting, errors },
   } = useForm({
     mode: "onChange",
+    resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    const arrErrors = Object.values(errors);
+    if (arrErrors.length > 0) {
+      toast.error(arrErrors[0]?.message, {
+        pauseOnHover: false,
+      });
+    }
+  }, [errors]);
+
+  const [togglePassword, setTogglePassword] = useState(false);
+
   // const { userInfo } = useAuth();
   // const navigate = useNavigate();
   // useEffect(() => {
@@ -40,11 +69,21 @@ const SignInPage = () => {
         <Field>
           <Label htmlFor="email">Password</Label>
           <Input
-            type="password"
+            type={togglePassword ? "text" : "password"}
             name="password"
             placeholder="Enter your password"
             control={control}
-          ></Input>
+          >
+            {!togglePassword ? (
+              <IconEyeClose
+                onClick={() => setTogglePassword(true)}
+              ></IconEyeClose>
+            ) : (
+              <IconEyeOpen
+                onClick={() => setTogglePassword(false)}
+              ></IconEyeOpen>
+            )}
+          </Input>
         </Field>
         <Button
           type="submit"
