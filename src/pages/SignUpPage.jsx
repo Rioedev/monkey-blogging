@@ -14,6 +14,9 @@ import { auth, db } from "../firebases/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import AuthenticationPage from "./AuthenticationPage";
+import { NavLink } from "react-router-dom";
+
+document.title = "Register Page";
 
 const schema = yup.object({
   fullname: yup.string().required("Please enter your full name"),
@@ -68,6 +71,10 @@ const SignUpPage = () => {
     }
   }, [errors]);
 
+  useEffect(() => {
+    document.title = "Register Page";
+  }, []);
+
   return (
     <AuthenticationPage>
       <form className="form" onSubmit={handleSubmit(handleSignUp)}>
@@ -108,6 +115,9 @@ const SignUpPage = () => {
             )}
           </Input>
         </Field>
+        <div className="have-account">
+          You already have an account? <NavLink to={"/sign-in"}>Login</NavLink>
+        </div>
         <Button
           type="submit"
           style={{

@@ -15,6 +15,7 @@ import { useState } from "react";
 import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebases/firebase-config";
+import { NavLink } from "react-router-dom";
 
 const schema = yup.object({
   email: yup
@@ -51,10 +52,10 @@ const SignInPage = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!userInfo.email) navigate("/sign-up");
-    else navigate("/");
+    document.title = "Login Page";
+    if (userInfo?.email) navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userInfo]);
   const handleSignIn = async (values) => {
     if (!isValid) return;
     await signInWithEmailAndPassword(auth, values.email, values.password);
@@ -91,6 +92,9 @@ const SignInPage = () => {
             )}
           </Input>
         </Field>
+        <div className="have-account">
+          You don’t have an account? <NavLink to={"/sign-up"}>Register</NavLink>
+        </div>
         <Button
           type="submit"
           style={{

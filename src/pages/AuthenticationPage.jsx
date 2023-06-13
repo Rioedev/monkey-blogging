@@ -18,6 +18,14 @@ const AuthenticationPageStyled = styled.div`
     max-width: 700px;
     margin: 0 auto;
   }
+  .have-account {
+    margin-bottom: 40px;
+    a {
+      display: inline-block;
+      color: ${(props) => props.theme.primary};
+      font-weight: 500;
+    }
+  }
 `;
 
 // eslint-disable-next-line react/prop-types
