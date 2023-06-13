@@ -13,6 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { IconEyeClose, IconEyeOpen } from "../components/icon";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebases/firebase-config";
 
 const schema = yup.object({
   email: yup
@@ -46,14 +48,18 @@ const SignInPage = () => {
 
   const [togglePassword, setTogglePassword] = useState(false);
 
-  // const { userInfo } = useAuth();
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!userInfo.email) navigate("/sign-up");
-  //   else navigate("/");
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-  const handleSignIn = (values) => {};
+  const { userInfo } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userInfo.email) navigate("/sign-up");
+    else navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const handleSignIn = async (values) => {
+    if (!isValid) return;
+    await signInWithEmailAndPassword(auth, values.email, values.password);
+    navigate("/");
+  };
   return (
     <AuthenticationPage>
       <form className="form" onSubmit={handleSubmit(handleSignIn)}>
