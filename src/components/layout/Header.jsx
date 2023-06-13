@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../button/Button";
+import { NavLink } from "react-router-dom";
 
 const menuLinks = [
   {
@@ -8,11 +9,11 @@ const menuLinks = [
     title: "Home",
   },
   {
-    url: "/",
+    url: "/blog",
     title: "Blog",
   },
   {
-    url: "/",
+    url: "/contact",
     title: "Contact",
   },
 ];
@@ -33,6 +34,7 @@ const HeaderStyles = styled.header`
     gap: 20px;
     margin-left: 40px;
     list-style: none;
+    font-weight: 500;
   }
   .search {
     margin-left: auto;
@@ -44,6 +46,7 @@ const HeaderStyles = styled.header`
     display: flex;
     align-items: center;
     position: relative;
+    font-weight: 500;
   }
   .search-input {
     flex: 1;
@@ -65,15 +68,15 @@ const Header = () => {
     <HeaderStyles>
       <div className="container">
         <div className="header-main">
-          <a href="/">
+          <NavLink to="/">
             <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
-          </a>
+          </NavLink>
           <ul className="menu">
             {menuLinks.map((item) => (
               <li key={item.title} className="menu-item">
-                <a href={item.url} className="menu-link">
+                <NavLink to={item.url} className="menu-link">
                   {item.title}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -114,7 +117,11 @@ const Header = () => {
               </svg>
             </span>
           </div>
-          <Button style={{ maxWidth: "192px" }} className="header-button">
+          <Button
+            style={{ maxWidth: "192px" }}
+            height="57px"
+            className="header-button"
+          >
             Sign Up
           </Button>
         </div>
