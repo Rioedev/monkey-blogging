@@ -7,7 +7,6 @@ const HeadingStyles = styled.h2`
   position: relative;
   font-weight: 700;
   margin-bottom: 30px;
-  font-family: "Montserrat", sans-serif;
   &:before {
     content: "";
     width: 50px;
