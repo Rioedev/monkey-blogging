@@ -78,10 +78,7 @@ const SignInPage = () => {
         </div>
         <Button
           type="submit"
-          style={{
-            maxWidth: 340,
-            margin: "0 auto",
-          }}
+          className="w-full max-w-[300px] mx-auto"
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
