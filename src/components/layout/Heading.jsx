@@ -5,7 +5,7 @@ const HeadingStyles = styled.h2`
   color: ${(props) => props.theme.tertiary};
   font-size: 28px;
   position: relative;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 30px;
   &:before {
     content: "";
@@ -16,6 +16,10 @@ const HeadingStyles = styled.h2`
     top: 0;
     left: 0;
     transform: translate(0, -150%);
+  }
+  @media screen and (max-width: 1023.98px) {
+    font-size: 22px;
+    margin-bottom: 20px;
   }
 `;
 // eslint-disable-next-line react/prop-types

@@ -60,6 +60,17 @@ const HeaderStyles = styled.header`
     transform: translateY(-50%);
     right: 15px;
   }
+  @media screen and (max-width: 1023.98px) {
+    .logo {
+      max-width: 30px;
+    }
+    .menu,
+    .search,
+    .header-button,
+    .header-auth {
+      display: none;
+    }
+  }
 `;
 
 function getLastName(name) {
