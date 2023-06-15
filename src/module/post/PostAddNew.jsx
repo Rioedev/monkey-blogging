@@ -50,7 +50,7 @@ const PostAddNew = () => {
                 name="status"
                 control={control}
                 checked={watchStatus === "approved"}
-                onClick={() => setValue("status", "approved")}
+                // onClick={() => setValue("status", "approved")}
                 value="approved"
               >
                 Approved
@@ -59,7 +59,7 @@ const PostAddNew = () => {
                 name="status"
                 control={control}
                 checked={watchStatus === "pending"}
-                onClick={() => setValue("status", "pending")}
+                // onClick={() => setValue("status", "pending")}
                 value="pending"
               >
                 Pending
@@ -68,7 +68,7 @@ const PostAddNew = () => {
                 name="status"
                 control={control}
                 checked={watchStatus === "reject"}
-                onClick={() => setValue("status", "reject")}
+                // onClick={() => setValue("status", "reject")}
                 value="reject"
               >
                 Reject
