@@ -32,6 +32,16 @@ const PostNewestItemStyles = styled.div`
       margin-bottom: 8px;
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    .post {
+      &-image {
+        width: 140px;
+        height: 100px;
+      }
+    }
+  }
 `;
 
 const PostNewestItem = () => {
