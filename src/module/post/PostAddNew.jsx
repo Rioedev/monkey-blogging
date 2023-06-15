@@ -9,6 +9,13 @@ import Button from "../../components/button/Button";
 import Dropdown from "../../components/dropdown/Dropdown";
 import slugify from "slugify";
 import { postStatus } from "../../utils/constants";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
@@ -27,8 +34,51 @@ const PostAddNew = () => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
     cloneValues.status = Number(values.status);
-    console.log("addPostHandler ~ values:", values);
+    console.log("addPostHandler ~ cloneValues:", cloneValues);
+    handleUploadImage(cloneValues.image);
   };
+
+  const handleUploadImage = (file) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "images/" + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            console.log("Nothing at all");
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+        });
+      }
+    );
+  };
+
+  const onSelectImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setValue("image", file);
+  };
+
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -52,6 +102,10 @@ const PostAddNew = () => {
           </Field>
         </div>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
+          <Field>
+            <Label>Image</Label>
+            <input type="file" name="image" onChange={onSelectImage} />
+          </Field>
           <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">
