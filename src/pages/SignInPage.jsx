@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../contexts/auth-context";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import AuthenticationPage from "./AuthenticationPage";
 import { useForm } from "react-hook-form";
 import Field from "../components/field/Field";
@@ -11,11 +11,9 @@ import Button from "../components/button/Button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { useState } from "react";
-import { IconEyeClose, IconEyeOpen } from "../components/icon";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebases/firebase-config";
-import { NavLink } from "react-router-dom";
+import InputPasswordToggle from "../components/input/InputPasswordToggle";
 
 const schema = yup.object({
   email: yup
@@ -47,8 +45,6 @@ const SignInPage = () => {
     }
   }, [errors]);
 
-  const [togglePassword, setTogglePassword] = useState(false);
-
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
@@ -75,22 +71,7 @@ const SignInPage = () => {
         </Field>
         <Field>
           <Label htmlFor="email">Password</Label>
-          <Input
-            type={togglePassword ? "text" : "password"}
-            name="password"
-            placeholder="Enter your password"
-            control={control}
-          >
-            {!togglePassword ? (
-              <IconEyeClose
-                onClick={() => setTogglePassword(true)}
-              ></IconEyeClose>
-            ) : (
-              <IconEyeOpen
-                onClick={() => setTogglePassword(false)}
-              ></IconEyeOpen>
-            )}
-          </Input>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
           You don’t have an account? <NavLink to={"/sign-up"}>Register</NavLink>
