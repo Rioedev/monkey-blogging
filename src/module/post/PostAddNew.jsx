@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Field from "../../components/field/Field";
@@ -6,7 +6,6 @@ import Label from "../../components/label/Label";
 import Input from "../../components/input/Input";
 import Radio from "../../components/checkbox/Radio";
 import Button from "../../components/button/Button";
-import Dropdown from "../../components/dropdown/Dropdown";
 import ImageUpload from "../../components/image/ImageUpload";
 import slugify from "slugify";
 import { postStatus } from "../../utils/constants";
@@ -15,6 +14,7 @@ import Toggle from "../../components/toggle/Toggle";
 import { useEffect } from "react";
 import { db } from "../../firebases/firebase-config";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { Dropdown } from "../../components/dropdown";
 
 const PostAddNewStyles = styled.div``;
 
@@ -25,7 +25,7 @@ const PostAddNew = () => {
       title: "",
       slug: "",
       status: 2,
-      category: "",
+      categoryId: "",
       hot: false,
     },
   });
@@ -36,11 +36,15 @@ const PostAddNew = () => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
     cloneValues.status = Number(values.status);
+    console.log("addPostHandler ~ cloneValues:", cloneValues);
   };
 
   const { image, progress, handleSelectImage, handleDeleteImage } =
     useFirebaseImage(setValue, getValues);
 
+  const [categories, setCategories] = useState([]);
+
+  // get category
   useEffect(() => {
     async function getData() {
       const colRef = collection(db, "categories");
@@ -48,14 +52,13 @@ const PostAddNew = () => {
       const querySnapshot = await getDocs(q);
       let result = [];
       querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
         result.push({
           id: doc.id,
           ...doc.data(),
         });
       });
-      console.log("getData ~ result:", result);
+      setCategories(result);
     }
     getData();
   }, []);
@@ -96,11 +99,18 @@ const PostAddNew = () => {
           <Field>
             <Label>Category</Label>
             <Dropdown>
-              <Dropdown.Option>Knowledge</Dropdown.Option>
-              <Dropdown.Option>Blockchain</Dropdown.Option>
-              <Dropdown.Option>Setup</Dropdown.Option>
-              <Dropdown.Option>Nature</Dropdown.Option>
-              <Dropdown.Option>Developer</Dropdown.Option>
+              <Dropdown.Select placeholder="Select the category"></Dropdown.Select>
+              <Dropdown.List>
+                {categories.length > 0 &&
+                  categories.map((item) => (
+                    <Dropdown.Option
+                      key={item.id}
+                      onClick={() => setValue("categoryId", item.id)}
+                    >
+                      {item.name}
+                    </Dropdown.Option>
+                  ))}
+              </Dropdown.List>
             </Dropdown>
           </Field>
           {/* <Field>
