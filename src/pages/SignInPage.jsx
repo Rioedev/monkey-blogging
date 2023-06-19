@@ -48,7 +48,6 @@ const SignInPage = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
-    document.title = "Login Page";
     if (userInfo?.email) navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);

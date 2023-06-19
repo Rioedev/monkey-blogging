@@ -22,7 +22,7 @@ const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
   const { userInfo } = useAuth();
-  const { control, watch, setValue, handleSubmit, getValues } = useForm({
+  const { control, watch, setValue, handleSubmit, getValues, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -30,6 +30,7 @@ const PostAddNew = () => {
       status: 2,
       categoryId: "",
       hot: false,
+      image: "",
     },
   });
   const watchStatus = watch("status");
@@ -40,6 +41,7 @@ const PostAddNew = () => {
     useFirebaseImage(setValue, getValues);
 
   const [categories, setCategories] = useState([]);
+  const [selectCategory, setSelectCategory] = useState("");
 
   const addPostHandler = async (values) => {
     const cloneValues = { ...values };
@@ -52,7 +54,15 @@ const PostAddNew = () => {
       userId: userInfo.uid,
     });
     toast.success("Created new post successfully!");
-    console.log("addPostHandler ~ cloneValues:", cloneValues);
+    reset({
+      title: "",
+      slug: "",
+      status: 2,
+      categoryId: "",
+      hot: false,
+      image: "",
+    });
+    setSelectCategory({});
   };
 
   // get category
@@ -73,6 +83,11 @@ const PostAddNew = () => {
     }
     getData();
   }, []);
+
+  const handleClickOption = (item) => {
+    setValue("categoryId", item.id);
+    setSelectCategory(item);
+  };
 
   return (
     <PostAddNewStyles>
@@ -110,19 +125,26 @@ const PostAddNew = () => {
           <Field>
             <Label>Category</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select the category"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={`${selectCategory.name || "Select the category"}`}
+              ></Dropdown.Select>
               <Dropdown.List>
                 {categories.length > 0 &&
                   categories.map((item) => (
                     <Dropdown.Option
                       key={item.id}
-                      onClick={() => setValue("categoryId", item.id)}
+                      onClick={() => handleClickOption(item)}
                     >
                       {item.name}
                     </Dropdown.Option>
                   ))}
               </Dropdown.List>
             </Dropdown>
+            {selectCategory?.name && (
+              <span className="inline-block text-green-600 p-3 rounded-lg text-sm font-medium bg-green-100">
+                {selectCategory?.name}
+              </span>
+            )}
           </Field>
           {/* <Field>
             <Label>Author</Label>

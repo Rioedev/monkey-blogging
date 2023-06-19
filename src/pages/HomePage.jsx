@@ -7,6 +7,8 @@ import HomeNewest from "../module/home/HomeNewest";
 
 const HomePageStyles = styled.div``;
 
+document.title = "Monkey Blogging";
+
 const HomePage = () => {
   return (
     <HomePageStyles>

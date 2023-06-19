@@ -67,10 +67,6 @@ const SignUpPage = () => {
     }
   }, [errors]);
 
-  useEffect(() => {
-    document.title = "Register Page";
-  }, []);
-
   return (
     <AuthenticationPage>
       <form className="form" onSubmit={handleSubmit(handleSignUp)}>
