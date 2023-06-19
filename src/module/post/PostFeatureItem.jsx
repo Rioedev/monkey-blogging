@@ -75,9 +75,13 @@ const PostFeatureItem = ({ data }) => {
 
   useEffect(() => {
     async function fetchUser() {
-      const docRef = doc(db, "users", data.userId);
-      const docSnap = await getDoc(docRef);
-      setUser(docSnap.data());
+      if (data.userId) {
+        const docRef = doc(db, "users", data.userId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.data) {
+          setUser(docSnap.data());
+        }
+      }
     }
     fetchUser();
   }, [data.userId]);
@@ -91,7 +95,7 @@ const PostFeatureItem = ({ data }) => {
       <div className="post-content">
         <div className="post-top">
           {category.name && <PostCategory>{category.name}</PostCategory>}
-          <PostMeta authorName={user?.name}></PostMeta>
+          <PostMeta authorName={user?.fullname}></PostMeta>
         </div>
         <PostTitle size="big">{data.title}</PostTitle>
       </div>

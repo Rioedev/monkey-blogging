@@ -13,7 +13,14 @@ import useFirebaseImage from "../../hooks/useFirebaseImage";
 import Toggle from "../../components/toggle/Toggle";
 import { useEffect } from "react";
 import { db } from "../../firebases/firebase-config";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 import { Dropdown } from "../../components/dropdown";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/auth-context";
@@ -52,6 +59,7 @@ const PostAddNew = () => {
       ...cloneValues,
       image,
       userId: userInfo.uid,
+      createdAt: serverTimestamp,
     });
     toast.success("Created new post successfully!");
     reset({
