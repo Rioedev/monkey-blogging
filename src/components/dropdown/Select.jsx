@@ -6,7 +6,7 @@ const Select = ({ placeholder = "" }) => {
   const { toggle, show } = useDropdown();
   return (
     <div
-      className="flex items-center justify-between p-5 bg-[#E7ECF3] rounded cursor-pointer font-medium"
+      className="flex items-center justify-between p-5 bg-[#E7ECF3] rounded-lg cursor-pointer font-medium"
       onClick={toggle}
     >
       <span>{placeholder}</span>

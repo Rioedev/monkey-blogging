@@ -12,9 +12,10 @@ const InputSyles = styled.div`
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.2s linear;
+    color: ${(props) => props.theme.black};
     border: 1px solid transparent;
   }
-  .input:focus {
+  input:focus {
     background-color: #fff;
     border-color: ${(props) => props.theme.primary};
   }

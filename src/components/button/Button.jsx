@@ -1,14 +1,13 @@
-import React from "react";
 import styled, { css } from "styled-components";
-import LoadingSpinner from "../loading/LoadingSpinner";
+import React from "react";
 import PropTypes from "prop-types";
+import LoadingSpinner from "../loading/LoadingSpinner";
 import { NavLink } from "react-router-dom";
 
 const ButtonStyles = styled.button`
   cursor: pointer;
   padding: 0 25px;
   line-height: 1;
-  color: #fff;
   border-radius: 8px;
   font-weight: 600;
   font-size: 18px;

@@ -38,7 +38,7 @@ body {
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Epilogue", sans-serif;
   color: #232323;
 }
 
@@ -160,4 +160,7 @@ a {
   position: absolute;
   width: 1px;
   white-space: nowrap;
+}
+.form-layout {
+  @apply grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 mb-5 lg:mb-10;
 }
