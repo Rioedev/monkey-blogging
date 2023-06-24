@@ -1,14 +1,14 @@
-import React from "react";
 import styled from "styled-components";
-import PostCategory from "./PostCategory";
+import slugify from "slugify";
+import React from "react";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import PostCategory from "./PostCategory";
 import { useState } from "react";
 import { useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebases/firebase-config";
-import slugify from "slugify";
 
 const PostFeatureItemStyles = styled.div`
   width: 100%;
@@ -89,6 +89,11 @@ const PostFeatureItem = ({ data }) => {
 
   if (!data || !data.id) return null;
 
+  const date = data?.createdAt?.seconds
+    ? new Date(data?.createdAt?.seconds * 1000)
+    : new Date();
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
+
   return (
     <PostFeatureItemStyles>
       <PostImage url={data.image} alt="unsplash"></PostImage>
@@ -101,7 +106,7 @@ const PostFeatureItem = ({ data }) => {
           <PostMeta
             to={slugify(user?.fullname || "", { lower: true })}
             authorName={user?.fullname}
-            date={data?.createdAt || ""}
+            date={formatDate}
           ></PostMeta>
         </div>
         <PostTitle to={data.slug} size="big">
