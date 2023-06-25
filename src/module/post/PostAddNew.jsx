@@ -24,6 +24,7 @@ import {
 import { Dropdown } from "../../components/dropdown";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/auth-context";
+import DashboardHeading from "../dashboard/DashboardHeading";
 
 const PostAddNewStyles = styled.div``;
 
@@ -117,8 +118,7 @@ const PostAddNew = () => {
 
   return (
     <PostAddNewStyles>
-      <h1 className="dashboard-heading">Add post</h1>
-      <p className="dashboard-short-desc">Add new post</p>
+      <DashboardHeading title="Add post" desc="Add new post"></DashboardHeading>
       <form onSubmit={handleSubmit(addPostHandler)}>
         <div className="form-layout">
           <Field>

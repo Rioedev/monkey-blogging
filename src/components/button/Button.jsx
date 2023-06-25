@@ -11,6 +11,7 @@ const ButtonStyles = styled.button`
   border-radius: 8px;
   font-weight: 600;
   font-size: 18px;
+  height: ${(props) => props.height || "66px"};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +38,7 @@ const ButtonStyles = styled.button`
       color: ${(props) => props.theme.primary};
       background-color: rgba(29, 192, 113, 0.1);
     `};
-  height: ${(props) => props.height || "66px"};
+
   &:disabled {
     opacity: 0.5;
     pointer-events: none;

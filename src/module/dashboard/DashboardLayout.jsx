@@ -18,7 +18,6 @@ const DashboardStyles = styled.div`
     }
     &-short-desc {
       font-size: 14px;
-      margin-bottom: 40px;
       color: ${(props) => props.theme.gray80};
     }
     &-main {
@@ -31,9 +30,6 @@ const DashboardStyles = styled.div`
     @media screen and (max-width: 1023.98px) {
       &-heading {
         font-size: 20px;
-      }
-      &-short-desc {
-        margin-bottom: 25px;
       }
       &-main {
         grid-template-columns: 100%;

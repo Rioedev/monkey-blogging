@@ -2,11 +2,11 @@ import React from "react";
 import { useDropdown } from "./dropdown-context";
 
 // eslint-disable-next-line react/prop-types
-const Select = ({ placeholder = "" }) => {
+const Select = ({ placeholder = "", className = "" }) => {
   const { toggle, show } = useDropdown();
   return (
     <div
-      className="flex items-center justify-between p-5 bg-[#E7ECF3] rounded-lg cursor-pointer font-medium"
+      className={`flex items-center justify-between p-5 bg-[#E7ECF3] rounded-lg cursor-pointer font-medium ${className}`}
       onClick={toggle}
     >
       <span>{placeholder}</span>

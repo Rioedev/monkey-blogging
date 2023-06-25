@@ -7,9 +7,6 @@ const FieldStyles = styled.div`
   align-items: flex-start;
   row-gap: 10px;
   margin-bottom: 25px;
-  @media screen and (max-width: 1023.98px) {
-    margin-bottom: 25px;
-  }
   &:last-child {
     margin-bottom: 0;
   }
