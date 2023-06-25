@@ -20,10 +20,15 @@ const menuLinks = [
 ];
 
 const HeaderStyles = styled.header`
-  padding: 35px 0;
+  padding: 25px 0;
   .header-main {
     display: flex;
     align-items: center;
+  }
+  .header-auth {
+    display: flex;
+    align-items: center;
+    gap: 20px;
   }
   .logo {
     display: block;
@@ -53,6 +58,7 @@ const HeaderStyles = styled.header`
   .search-input {
     flex: 1;
     padding-right: 40px;
+    font-weight: 500;
   }
   .search-icon {
     position: absolute;
@@ -137,18 +143,22 @@ const Header = () => {
           {!userInfo ? (
             <Button
               type="button"
-              to="/sign-up"
-              height="57px"
+              to="/sign-in"
+              height="56px"
               className="header-button"
             >
-              Sign Up
+              Login
             </Button>
           ) : (
             <div className="header-auth">
-              <span>Welcome back, </span>
-              <strong className="text-primary">
-                {getLastName(userInfo?.displayName)}
-              </strong>
+              <Button
+                type="button"
+                height="56px"
+                className="header-button"
+                to="/dashboard"
+              >
+                Dashboard
+              </Button>
             </div>
           )}
         </div>
