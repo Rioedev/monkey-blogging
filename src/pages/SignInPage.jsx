@@ -1,19 +1,19 @@
 import React from "react";
-import { useAuth } from "../contexts/auth-context";
-import { useEffect } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
-import AuthenticationPage from "./AuthenticationPage";
-import { useForm } from "react-hook-form";
+import InputPasswordToggle from "../components/input/InputPasswordToggle";
 import Field from "../components/field/Field";
-import { Label } from "../components/label";
-import { Input } from "../components/input";
 import Button from "../components/button/Button";
+import AuthenticationPage from "./AuthenticationPage";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate, NavLink } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useAuth } from "../contexts/auth-context";
 import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { Label } from "../components/label";
+import { Input } from "../components/input";
 import { auth } from "../firebases/firebase-config";
-import InputPasswordToggle from "../components/input/InputPasswordToggle";
 
 const schema = yup.object({
   email: yup
@@ -48,13 +48,19 @@ const SignInPage = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
+    document.title = "Login Page";
     if (userInfo?.email) navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
   const handleSignIn = async (values) => {
     if (!isValid) return;
-    await signInWithEmailAndPassword(auth, values.email, values.password);
-    navigate("/");
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      navigate("/");
+    } catch (error) {
+      if (error.message.includes("wrong-password"))
+        toast.error("It seems your password was wrong");
+    }
   };
   return (
     <AuthenticationPage>
@@ -81,7 +87,7 @@ const SignInPage = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Sign In
+          Login
         </Button>
       </form>
     </AuthenticationPage>
