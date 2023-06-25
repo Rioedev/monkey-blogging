@@ -1,6 +1,7 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 const PageNotFoundStyles = styled.div`
   height: 100vh;
   display: flex;
@@ -46,6 +47,7 @@ const PageNotFoundStyles = styled.div`
 `;
 
 const PageNotFound = () => {
+  const navigate = useNavigate();
   return (
     <PageNotFoundStyles>
       <div className="page-content">
@@ -56,9 +58,9 @@ const PageNotFound = () => {
           Chances are your spelled something wrong, so can you double check the
           URL?
         </p>
-        <NavLink to="/" className={"back"}>
-          Back to home
-        </NavLink>
+        <button onClick={() => navigate(-1)} className="back">
+          Go back
+        </button>
       </div>
     </PageNotFoundStyles>
   );
