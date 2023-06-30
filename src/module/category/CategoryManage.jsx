@@ -5,11 +5,11 @@ import LabelStatus from "../../components/label/LabelStatus";
 import ActionView from "../../components/action/ActionView";
 import ActionDelete from "../../components/action/ActionDelete";
 import ActionEdit from "../../components/action/ActionEdit";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../../firebases/firebase-config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { categoryStatus } from "../../utils/constants";
+import Swal from "sweetalert2";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
@@ -26,6 +26,23 @@ const CategoryManage = () => {
       setCategoryList(results);
     });
   });
+  const handleDeleteCategory = async (docId) => {
+    const colRef = doc(db, "categories", docId);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(colRef);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
@@ -64,7 +81,9 @@ const CategoryManage = () => {
                   <div className="flex items-center gap-x-3">
                     <ActionView></ActionView>
                     <ActionEdit></ActionEdit>
-                    <ActionDelete></ActionDelete>
+                    <ActionDelete
+                      onClick={() => handleDeleteCategory(category.id)}
+                    ></ActionDelete>
                   </div>
                 </td>
               </tr>
