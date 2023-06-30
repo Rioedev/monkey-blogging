@@ -5,20 +5,38 @@ import LabelStatus from "../../components/label/LabelStatus";
 import ActionView from "../../components/action/ActionView";
 import ActionDelete from "../../components/action/ActionDelete";
 import ActionEdit from "../../components/action/ActionEdit";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "../../firebases/firebase-config";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { categoryStatus } from "../../utils/constants";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
   const navigate = useNavigate();
+  const [filter, setFilter] = useState("");
+  const [categoryCount, setCategoryCount] = useState(0);
   useEffect(() => {
     const colRef = collection(db, "categories");
-    onSnapshot(colRef, (snapshot) => {
+    const newRef = filter
+      ? query(
+          colRef,
+          where("name", ">=", filter),
+          where("name", "<=", filter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapshot) => {
       let results = [];
+      setCategoryCount(Number(snapshot.size));
       snapshot.forEach((doc) => {
         results.push({
           id: doc.id,
@@ -27,7 +45,7 @@ const CategoryManage = () => {
       });
       setCategoryList(results);
     });
-  });
+  }, [filter]);
   const handleDeleteCategory = async (docId) => {
     const colRef = doc(db, "categories", docId);
     Swal.fire({
@@ -45,6 +63,11 @@ const CategoryManage = () => {
       }
     });
   };
+
+  const handleInputFilter = debounce((e) => {
+    setFilter(e.target.value);
+  }, 400);
+
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
@@ -52,6 +75,14 @@ const CategoryManage = () => {
           Create category
         </Button>
       </DashboardHeading>
+      <div className="mb-10 flex justify-end">
+        <input
+          type="text"
+          placeholder="Search category ..."
+          className="py-4 px-5 border border-gray-300 rounded-lg"
+          onChange={handleInputFilter}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
