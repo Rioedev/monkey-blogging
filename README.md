@@ -1,3 +1,3 @@
 # monkey-blogging
 
-Use react, firebase, styled-components
+Use react, firebase, styled-components, tailwindCSS
