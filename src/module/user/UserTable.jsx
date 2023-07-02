@@ -6,6 +6,8 @@ import { db } from "../../firebases/firebase-config";
 import ActionEdit from "../../components/action/ActionEdit";
 import ActionDelete from "../../components/action/ActionDelete";
 import { useNavigate } from "react-router-dom";
+import { userRole, userStatus } from "../../utils/constants";
+import { LabelStatus } from "../../components/label";
 
 const UserTable = () => {
   const navigate = useNavigate();
@@ -24,8 +26,33 @@ const UserTable = () => {
     });
   }, []);
 
+  const renderLabelStatus = (status) => {
+    switch (status) {
+      case userStatus.ACTIVE:
+        return <LabelStatus type="success">Active</LabelStatus>;
+      case userStatus.PENDING:
+        return <LabelStatus type="warning">Pending</LabelStatus>;
+      case userStatus.BAN:
+        return <LabelStatus type="danger">Rejected</LabelStatus>;
+      default:
+        break;
+    }
+  };
+
   const handleDeleteUser = () => {};
 
+  const renderRoleLabel = (role) => {
+    switch (role) {
+      case userRole.ADMIN:
+        return "Admin";
+      case userRole.MOD:
+        return "Moderator";
+      case userRole.USER:
+        return "User";
+      default:
+        break;
+    }
+  };
   const renderUserItem = (user) => {
     return (
       <tr key={user.id}>
@@ -33,22 +60,24 @@ const UserTable = () => {
         <td className="whitespace-nowrap">
           <div className="flex items-center gap-x-3">
             <img
-              src="https://images.unsplash.com/photo-1682478695074-9e47f09a7459?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
+              src={user?.avatar}
               alt="avatar"
               className="w-10 h-10 object-cover rounded-full flex-shrink-0"
             />
             <div className="flex-1">
               <h3 className="font-semibold">{user?.fullname}</h3>
               <time className="text-sm text-gray-500">
-                {new Date().toLocaleDateString()}
+                {new Date(user?.createdAt?.seconds * 1000).toLocaleDateString(
+                  "vi-VI"
+                )}
               </time>
             </div>
           </div>
         </td>
         <td>{user?.username}</td>
         <td title={user.email}>{user?.email.slice(0, 12) + "..."}</td>
-        <td></td>
-        <td></td>
+        <td>{renderLabelStatus(Number(user?.status))}</td>
+        <td>{renderRoleLabel(Number(user?.role))}</td>
         <td>
           <div className="flex items-center gap-x-3">
             <ActionEdit
