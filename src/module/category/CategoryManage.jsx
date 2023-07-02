@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
-const CATEGORY_PER_PAGE = 1;
+const CATEGORY_PER_PAGE = 7;
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = useState([]);
