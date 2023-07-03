@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Table } from "../../components/table";
 import { useEffect } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebases/firebase-config";
 import ActionEdit from "../../components/action/ActionEdit";
 import ActionDelete from "../../components/action/ActionDelete";
 import { useNavigate } from "react-router-dom";
 import { userRole, userStatus } from "../../utils/constants";
 import { LabelStatus } from "../../components/label";
+import { deleteUser } from "firebase/auth";
+import Swal from "sweetalert2";
 
 const UserTable = () => {
   const navigate = useNavigate();
@@ -39,7 +41,24 @@ const UserTable = () => {
     }
   };
 
-  const handleDeleteUser = () => {};
+  const handleDeleteUser = async (user) => {
+    const colRef = doc(db, "users", user.id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(colRef);
+        await deleteUser(user);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
 
   const renderRoleLabel = (role) => {
     switch (role) {
@@ -83,9 +102,7 @@ const UserTable = () => {
             <ActionEdit
               onClick={() => navigate(`/manage/update-user?id=${user.id}`)}
             ></ActionEdit>
-            <ActionDelete
-              onClick={() => handleDeleteUser(user.id)}
-            ></ActionDelete>
+            <ActionDelete onClick={() => handleDeleteUser(user)}></ActionDelete>
           </div>
         </td>
       </tr>
