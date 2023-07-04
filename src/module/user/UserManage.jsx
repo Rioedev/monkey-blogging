@@ -8,7 +8,7 @@ const UserManage = () => {
     <div>
       <DashboardHeading title="Users" desc="Manage your user">
         <Button kind="ghost" height="60px" to="/manage/add-user">
-          Create user
+          Add new user
         </Button>
       </DashboardHeading>
       <UserTable></UserTable>
