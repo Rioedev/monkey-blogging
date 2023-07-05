@@ -7,11 +7,15 @@ import {
 } from "firebase/storage";
 import { useState } from "react";
 
-export default function useFirebaseImage(setValue, getValues) {
+export default function useFirebaseImage(
+  setValue,
+  getValues,
+  imageName = null,
+  cb = null
+) {
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState("");
   if (!setValue || !getValues) return;
-
   const handleUploadImage = (file) => {
     const storage = getStorage();
     const storageRef = ref(storage, "images/" + file.name);
@@ -34,7 +38,7 @@ export default function useFirebaseImage(setValue, getValues) {
         }
       },
       (error) => {
-        console.log(error);
+        console.log("Error");
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -44,7 +48,6 @@ export default function useFirebaseImage(setValue, getValues) {
       }
     );
   };
-
   const handleSelectImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -54,14 +57,19 @@ export default function useFirebaseImage(setValue, getValues) {
 
   const handleDeleteImage = () => {
     const storage = getStorage();
-    const imageRef = ref(storage, "images/" + getValues("image_name"));
+    const imageRef = ref(
+      storage,
+      "images/" + (imageName || getValues("image_name"))
+    );
     deleteObject(imageRef)
       .then(() => {
         console.log("Remove image successfully");
         setImage("");
         setProgress(0);
+        cb && cb();
       })
       .catch((error) => {
+        console.log("handleDeleteImage ~ error", error);
         console.log("Can not delete image");
       });
   };
@@ -71,6 +79,7 @@ export default function useFirebaseImage(setValue, getValues) {
   };
   return {
     image,
+    setImage,
     handleResetUpload,
     progress,
     handleSelectImage,

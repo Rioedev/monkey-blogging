@@ -1,56 +1,68 @@
-import React from "react";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import useFirebaseImage from "../../hooks/useFirebaseImage";
+import { db } from "../../firebases/firebase-config";
 import DashboardHeading from "../dashboard/DashboardHeading";
 import ImageUpload from "../../components/image/ImageUpload";
 import { Field, FieldCheckboxes } from "../../components/field";
 import { Label } from "../../components/label";
 import { Input } from "../../components/input";
 import Radio from "../../components/checkbox/Radio";
-import Button from "../../components/button/Button";
 import { userRole, userStatus } from "../../utils/constants";
-import { useForm } from "react-hook-form";
-import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebases/firebase-config";
-import { toast } from "react-toastify";
-import useFirebaseImage from "../../hooks/useFirebaseImage";
+import Button from "../../components/button/Button";
 
 const UserUpdate = () => {
   const {
     control,
     handleSubmit,
-    setValue,
     watch,
-    getValues,
-    formState: { isValid, isSubmitting },
     reset,
+    getValues,
+    setValue,
+    formState: { isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
   });
   const [params] = useSearchParams();
   const userId = params.get("id");
-
+  const watchStatus = watch("status");
+  const watchRole = watch("role");
+  const imageUrl = getValues("avatar");
+  const imageRegex = /%2F(\S+)\?/gm.exec(imageUrl);
+  const imageName = imageRegex?.length > 0 ? imageRegex[1] : "";
+  const { image, setImage, progress, handleSelectImage, handleDeleteImage } =
+    useFirebaseImage(setValue, getValues, imageName, deleteAvatar);
   const handleUpdateUser = async (values) => {
     if (!isValid) return;
     try {
       const colRef = doc(db, "users", userId);
       await updateDoc(colRef, {
         ...values,
+        avatar: image,
       });
-      toast.success("Updated user information successfully");
+      toast.success("Update user information successfully!");
     } catch (error) {
       console.log(error);
-      toast.error("Error updating user information");
+      toast.error("Update user failed!");
     }
   };
 
-  const watchStatus = watch("status");
-  const watchRole = watch("role");
-  const imageUrl = getValues("avatar");
-
+  async function deleteAvatar() {
+    const colRef = doc(db, "users", userId);
+    await updateDoc(colRef, {
+      avatar: "",
+    });
+  }
   useEffect(() => {
-    if (!userId) return;
+    setImage(imageUrl);
+  }, [imageUrl, setImage]);
+  useEffect(() => {
     async function fetchData() {
+      if (!userId) return;
       const colRef = doc(db, "users", userId);
       const docData = await getDoc(colRef);
       reset(docData && docData.data());
@@ -58,29 +70,21 @@ const UserUpdate = () => {
     fetchData();
   }, [userId, reset]);
 
-  const {
-    image,
-    handleResetUpload,
-    progress,
-    handleSelectImage,
-    handleDeleteImage,
-  } = useFirebaseImage(setValue, getValues);
-
   if (!userId) return null;
   return (
     <div>
       <DashboardHeading
         title="Update user"
-        desc="Update usre information"
+        desc="Update user information"
       ></DashboardHeading>
       <form onSubmit={handleSubmit(handleUpdateUser)}>
-        <div className="w-[200px] h-[200px] rounded-full mx-auto mb-10">
+        <div className="w-[200px] h-[200px] mx-auto rounded-full mb-10">
           <ImageUpload
             className="!rounded-full h-full"
             onChange={handleSelectImage}
             handleDeleteImage={handleDeleteImage}
             progress={progress}
-            image={imageUrl}
+            image={image}
           ></ImageUpload>
         </div>
         <div className="form-layout">
@@ -188,7 +192,7 @@ const UserUpdate = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Update information user
+          Update
         </Button>
       </form>
     </div>
