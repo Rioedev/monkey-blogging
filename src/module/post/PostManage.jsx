@@ -29,7 +29,6 @@ const PostManage = () => {
       <Table>
         <thead>
           <tr>
-            <th></th>
             <th>Id</th>
             <th>Post</th>
             <th>Category</th>
@@ -39,7 +38,6 @@ const PostManage = () => {
         </thead>
         <tbody>
           <tr>
-            <td></td>
             <td>01</td>
             <td>
               <div className="flex items-center gap-x-3">
