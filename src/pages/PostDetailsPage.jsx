@@ -18,6 +18,7 @@ import {
   where,
 } from "firebase/firestore";
 import parse from "html-react-parser";
+import AuthorBox from "../components/author/AuthorBox";
 
 const PostDetailsPageStyles = styled.div`
   padding-bottom: 100px;
@@ -143,15 +144,7 @@ const PostDetailsPage = () => {
           </div>
           <div className="post-content">
             <div className="entry-content">{parse(postInfo.content || "")}</div>
-            <div className="author">
-              <div className="author-image">
-                <img src={user?.avatar} />
-              </div>
-              <div className="author-content">
-                <h3 className="author-name">{user?.fullname}</h3>
-                <p className="author-desc">{user?.description}</p>
-              </div>
-            </div>
+            <AuthorBox userId={user.id}></AuthorBox>
           </div>
           <div className="post-related">
             <Heading>Bài viết liên quan</Heading>

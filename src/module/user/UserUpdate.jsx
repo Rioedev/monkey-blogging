@@ -14,6 +14,7 @@ import { Input } from "../../components/input";
 import Radio from "../../components/checkbox/Radio";
 import { userRole, userStatus } from "../../utils/constants";
 import Button from "../../components/button/Button";
+import { Textarea } from "../../components/textarea";
 
 const UserUpdate = () => {
   const {
@@ -183,6 +184,12 @@ const UserUpdate = () => {
                 User
               </Radio>
             </FieldCheckboxes>
+          </Field>
+        </div>
+        <div className="form-layout">
+          <Field>
+            <Label>Description</Label>
+            <Textarea name="description" control={control}></Textarea>
           </Field>
         </div>
         <Button
