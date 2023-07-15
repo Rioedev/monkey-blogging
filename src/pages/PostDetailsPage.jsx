@@ -3,22 +3,14 @@ import Layout from "../components/layout/Layout";
 import PostImage from "../module/post/PostImage";
 import PostCategory from "../module/post/PostCategory";
 import PostMeta from "../module/post/PostMeta";
-import Heading from "../components/layout/Heading";
-import PostItem from "../module/post/PostItem";
 import PageNotFound from "./NotFoundPage";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../firebases/firebase-config";
-import {
-  collection,
-  doc,
-  getDoc,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import parse from "html-react-parser";
 import AuthorBox from "../components/author/AuthorBox";
+import PostRelated from "../module/post/PostRelated";
 
 const PostDetailsPageStyles = styled.div`
   padding-bottom: 100px;
@@ -122,8 +114,12 @@ const PostDetailsPage = () => {
     }
     fetchData();
   }, [slug]);
-  if (!slug || !postInfo.title) return <PageNotFound></PageNotFound>;
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [slug]);
+  if (!slug) return <PageNotFound></PageNotFound>;
   if (!postInfo.title) return null;
+
   const { user } = postInfo;
   return (
     <PostDetailsPageStyles>
@@ -135,7 +131,7 @@ const PostDetailsPage = () => {
               className="post-feature"
             ></PostImage>
             <div className="post-info">
-              <PostCategory className="mb-6">
+              <PostCategory className="mb-6" to={postInfo.category?.slug}>
                 {postInfo.category?.name}
               </PostCategory>
               <h1 className="post-heading">{postInfo.title}</h1>
@@ -146,15 +142,7 @@ const PostDetailsPage = () => {
             <div className="entry-content">{parse(postInfo.content || "")}</div>
             <AuthorBox userId={user.id}></AuthorBox>
           </div>
-          <div className="post-related">
-            <Heading>Bài viết liên quan</Heading>
-            <div className="grid-layout grid-layout--primary">
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-            </div>
-          </div>
+          <PostRelated categoryId={postInfo?.category?.id}></PostRelated>
         </div>
       </Layout>
     </PostDetailsPageStyles>

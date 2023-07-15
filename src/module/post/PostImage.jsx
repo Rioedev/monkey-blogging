@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
@@ -12,14 +13,14 @@ const PostImageStyles = styled.div`
 `;
 
 // eslint-disable-next-line react/prop-types
-const PostImage = ({ className = "", url = "", alt = "", to = null }) => {
+const PostImage = ({ className = "", url = "", alt = "", to = "" }) => {
   if (to)
     return (
-      <NavLink to={to} style={{ display: "block" }}>
+      <Link to={`/${to}`} style={{ display: "block" }}>
         <PostImageStyles className={`post-image ${className}`}>
           <img src={url} alt={alt} loading="lazy" />
         </PostImageStyles>
-      </NavLink>
+      </Link>
     );
   return (
     <PostImageStyles className={`post-image ${className}`}>
