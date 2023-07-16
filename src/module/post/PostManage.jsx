@@ -22,8 +22,9 @@ import ActionEdit from "../../components/action/ActionEdit";
 import ActionDelete from "../../components/action/ActionDelete";
 import Swal from "sweetalert2";
 import LabelStatus from "../../components/label/LabelStatus";
-import { postStatus } from "../../utils/constants";
+import { postStatus, userRole } from "../../utils/constants";
 import { debounce } from "lodash";
+import { useAuth } from "../../contexts/auth-context";
 
 const POST_PER_PAGE = 7;
 
@@ -128,6 +129,9 @@ const PostManage = () => {
       documentSnapshots.docs[documentSnapshots.docs.length - 1];
     setLastDoc(lastVisible);
   };
+
+  const { userInfo } = useAuth();
+  if (userInfo.role !== userRole.ADMIN) return null;
 
   return (
     <div>
